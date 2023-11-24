@@ -8,8 +8,17 @@ class TextStyleName {
     color: ColorName.textColor,
   );
 
+  static TextStyle blackTextStyleSecondary = GoogleFonts.caladea(
+    color: ColorName.text200Color,
+  );
+
   static TextStyle accentTextStyle = GoogleFonts.caladea(
     color: ColorName.accentColor,
+  );
+
+  static TextStyle arabicBlackStyle = const TextStyle(
+    fontFamily: 'LPMQ',
+    color: ColorName.textColor,
   );
 }
 
