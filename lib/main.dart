@@ -1,4 +1,5 @@
 import 'package:alquranapp/persentations/home/home_page.dart';
+import 'package:alquranapp/persentations/home/splash_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
+        "/": (context) => const SplashPage(),
         '/home-page': (context) => const HomePage(),
       },
     );

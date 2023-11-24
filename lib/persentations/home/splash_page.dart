@@ -19,10 +19,13 @@ class _SplashPageState extends State<SplashPage> {
       body: FlutterSplashScreen.fadeIn(
         childWidget: Text(
           "AL-Qur'an App",
-          style: FontStyleName.blackTextStyle,
+          style: TextStyleName.blackTextStyle.copyWith(
+            fontSize: 26,
+            fontWeight: FontStyleName.bold,
+          ),
         ),
         duration: const Duration(seconds: 5),
-        backgroundColor: ColorName.textColor,
+        backgroundColor: ColorName.bgColor,
         nextScreen: const HomePage(),
       ),
     );
