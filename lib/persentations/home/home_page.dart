@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "AL-Qur'an App",
+            "Al-Qur'an App",
             style: TextStyleName.blackTextStyle.copyWith(
               fontWeight: FontStyleName.semiBold,
             ),

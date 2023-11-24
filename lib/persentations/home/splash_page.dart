@@ -18,7 +18,7 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: FlutterSplashScreen.fadeIn(
         childWidget: Text(
-          "AL-Qur'an App",
+          "Al-Qur'an App",
           style: TextStyleName.blackTextStyle.copyWith(
             fontSize: 26,
             fontWeight: FontStyleName.bold,
