@@ -1,5 +1,30 @@
 import 'dart:convert';
 
+class ListSurahModelResponse {
+  final int? code;
+  final String? message;
+  final List<ListSurahModel>? data;
+
+  ListSurahModelResponse({
+    this.code,
+    this.message,
+    this.data,
+  });
+
+  factory ListSurahModelResponse.fromJson(String str) =>
+      ListSurahModelResponse.fromMap(json.decode(str));
+
+  factory ListSurahModelResponse.fromMap(Map<String, dynamic> json) =>
+      ListSurahModelResponse(
+        code: json["code"],
+        message: json["message"],
+        data: json["data"] == null
+            ? []
+            : List<ListSurahModel>.from(
+                json["data"]!.map((x) => ListSurahModel.fromMap(x))),
+      );
+}
+
 class ListSurahModel {
   final int? nomor;
   final String? nama;
@@ -8,7 +33,7 @@ class ListSurahModel {
   final String? tempatTurun;
   final String? arti;
   final String? deskripsi;
-  final String? audio;
+  final Map<String, String>? audioFull;
 
   ListSurahModel({
     this.nomor,
@@ -18,7 +43,7 @@ class ListSurahModel {
     this.tempatTurun,
     this.arti,
     this.deskripsi,
-    this.audio,
+    this.audioFull,
   });
 
   factory ListSurahModel.fromJson(String str) =>
@@ -27,11 +52,12 @@ class ListSurahModel {
   factory ListSurahModel.fromMap(Map<String, dynamic> json) => ListSurahModel(
         nomor: json["nomor"],
         nama: json["nama"],
-        namaLatin: json["nama_latin"],
-        jumlahAyat: json["jumlah_ayat"],
-        tempatTurun: json["tempat_turun"],
+        namaLatin: json["namaLatin"],
+        jumlahAyat: json["jumlahAyat"],
+        tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audio: json["audio"],
+        audioFull: Map.from(json["audioFull"]!)
+            .map((k, v) => MapEntry<String, String>(k, v)),
       );
 }
