@@ -23,58 +23,76 @@ class SurahPage extends StatelessWidget {
             return Center(
               child: Text(
                 state.message,
-                style: TextStyleName.blackTextStyle,
+                style: blackTextStyle,
               ),
             );
           }
 
           if (state is ListSurahSuccess) {
             final data = state.response.data;
-            return ListView.separated(
-              itemBuilder: (context, index) {
-                final surah = data[index];
+            return RawScrollbar(
+              interactive: true,
+              thickness: 10.0,
+              scrollbarOrientation: ScrollbarOrientation.left,
+              thumbColor: ColorName.accent100Color,
+              radius: const Radius.circular(10),
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  final itemIndex = index ~/ 2;
+                  final surah = data[itemIndex];
+                  if (index.isOdd) {
+                    return const Divider(
+                      color: ColorName.bg200Color,
+                      height: 2,
+                    );
+                  }
 
-                return ListTile(
-                  leading: Container(
-                    height: 46,
-                    width: 46,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 4,
-                        color: ColorName.accentColor,
+                  return Material(
+                    child: InkWell(
+                      highlightColor: ColorName.bg200Color.withOpacity(0.4),
+                      splashColor: ColorName.bg300Color.withOpacity(0.5),
+                      onTap: () {},
+                      child: ListTile(
+                        leading: Container(
+                          height: 46,
+                          width: 46,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              width: 4,
+                              color: ColorName.accentColor,
+                            ),
+                          ),
+                          child: Text(
+                            "${surah.nomor}",
+                            style: blackTextStyle.copyWith(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        title: Text(
+                          "Surat ${surah.namaLatin ?? ''}",
+                          style: blackTextStyle.copyWith(
+                            fontSize: 18,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "${surah.tempatTurun ?? ''} | ${surah.jumlahAyat} ayat",
+                          style: blackTextStyleSecondary,
+                        ),
+                        trailing: Text(
+                          surah.nama ?? '',
+                          style: arabicBlackStyle.copyWith(
+                            fontSize: 18,
+                          ),
+                        ),
                       ),
                     ),
-                    child: Text(
-                      "${surah.nomor}",
-                      style: TextStyleName.blackTextStyle.copyWith(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    "Surat ${surah.namaLatin ?? ''}",
-                    style: TextStyleName.blackTextStyle.copyWith(
-                      fontSize: 18,
-                    ),
-                  ),
-                  subtitle: Text(
-                    "${surah.tempatTurun ?? ''} | ${surah.jumlahAyat} ayat",
-                    style: TextStyleName.blackTextStyleSecondary,
-                  ),
-                  trailing: Text(
-                    surah.nama ?? '',
-                    style: TextStyleName.arabicBlackStyle.copyWith(
-                      fontSize: 18,
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) => const Divider(
-                color: ColorName.bg200Color,
+                  );
+                },
+                itemCount: data!.length * 2 - 1,
               ),
-              itemCount: data!.length,
             );
           }
           return const Center(

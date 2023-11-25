@@ -3,31 +3,27 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
 
-class TextStyleName {
-  static TextStyle blackTextStyle = GoogleFonts.caladea(
-    color: ColorName.textColor,
-  );
+TextStyle blackTextStyle = GoogleFonts.caladea(
+  color: ColorName.textColor,
+);
 
-  static TextStyle blackTextStyleSecondary = GoogleFonts.caladea(
-    color: ColorName.text200Color,
-  );
+TextStyle blackTextStyleSecondary = GoogleFonts.caladea(
+  color: ColorName.text200Color,
+);
 
-  static TextStyle accentTextStyle = GoogleFonts.caladea(
-    color: ColorName.accentColor,
-  );
+TextStyle accentTextStyle = GoogleFonts.caladea(
+  color: ColorName.accentColor,
+);
 
-  static TextStyle arabicBlackStyle = const TextStyle(
-    fontFamily: 'LPMQ',
-    color: ColorName.textColor,
-  );
-}
+TextStyle arabicBlackStyle = const TextStyle(
+  fontFamily: 'LPMQ',
+  color: ColorName.textColor,
+);
 
-class FontStyleName {
-  static const FontWeight light = FontWeight.w300;
-  static const FontWeight regular = FontWeight.w400;
-  static const FontWeight medium = FontWeight.w500;
-  static const FontWeight semiBold = FontWeight.w600;
-  static const FontWeight bold = FontWeight.w700;
-  static const FontWeight extraBold = FontWeight.w800;
-  static const FontWeight black = FontWeight.w900;
-}
+FontWeight light = FontWeight.w300;
+FontWeight regular = FontWeight.w400;
+FontWeight medium = FontWeight.w500;
+FontWeight semiBold = FontWeight.w600;
+FontWeight bold = FontWeight.w700;
+FontWeight extraBold = FontWeight.w800;
+FontWeight black = FontWeight.w900;

@@ -28,8 +28,8 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(
             "Al-Qur'an App",
-            style: TextStyleName.blackTextStyle.copyWith(
-              fontWeight: FontStyleName.semiBold,
+            style: blackTextStyle.copyWith(
+              fontWeight: semiBold,
             ),
           ),
           actions: [
