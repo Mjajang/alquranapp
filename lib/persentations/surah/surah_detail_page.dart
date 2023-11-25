@@ -29,6 +29,7 @@ class _SurahDetailPageState extends State<SurahDetailPage>
   late List<Tab> tabs;
   late List<Widget> pages;
   late TabController _tabController;
+  late PageController _pageController;
 
   @override
   void initState() {
@@ -37,33 +38,43 @@ class _SurahDetailPageState extends State<SurahDetailPage>
     BlocProvider.of<DetailSurahBloc>(context)
         .add(DetailSurahGetEvent(widget.numberSurah));
 
-    tabs = widget.listSurah
-        .map((surah) => Tab(
-              text: surah.namaLatin,
-            ))
-        .toList();
-
-    pages = widget.listSurah
-        .map((surah) => DetailSurah(
-              surah: surah,
-            ))
-        .toList();
-
     _tabController = TabController(
       vsync: this,
       length: widget.listSurah.length,
       initialIndex: widget.initialIndex,
     );
+    _pageController = PageController(initialPage: widget.initialIndex);
+
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        _pageController.animateToPage(
+          _tabController.index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+
+    _pageController.addListener(() {
+      int page = _pageController.page!.round();
+      if (_tabController.index != page) {
+        _tabController.animateTo(page);
+      }
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<Tab> tabs =
+        widget.listSurah.map((surah) => Tab(text: surah.namaLatin)).toList();
+
     return DefaultTabController(
       length: widget.listSurah.length,
       child: Scaffold(
@@ -109,9 +120,17 @@ class _SurahDetailPageState extends State<SurahDetailPage>
             ),
           ),
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: pages,
+        body: PageView.builder(
+          controller: _pageController,
+          itemCount: widget.listSurah.length,
+          onPageChanged: (index) {
+            String numberSurah = widget.listSurah[index].nomor.toString();
+            BlocProvider.of<DetailSurahBloc>(context, listen: false)
+                .add(DetailSurahGetEvent(numberSurah));
+          },
+          itemBuilder: (context, index) {
+            return DetailSurah(surah: widget.listSurah[index]);
+          },
         ),
       ),
     );
