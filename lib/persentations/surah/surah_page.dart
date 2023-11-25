@@ -1,8 +1,10 @@
+import 'package:alquranapp/persentations/surah/surah_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants/colors.dart';
 import '../../common/constants/text_style.dart';
+import '../../data/models/list_surah_model.dart';
 import 'bloc/list_surah/list_surah_bloc.dart';
 
 class SurahPage extends StatelessWidget {
@@ -51,7 +53,21 @@ class SurahPage extends StatelessWidget {
                     child: InkWell(
                       highlightColor: ColorName.bg200Color.withOpacity(0.4),
                       splashColor: ColorName.bg300Color.withOpacity(0.5),
-                      onTap: () {},
+                      onTap: () {
+                        final reversedList =
+                            List<ListSurahModel>.from(data.reversed);
+                        final selectedIndex = data.length - 1 - itemIndex;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SurahDetailPage(
+                              listSurah: reversedList,
+                              initialIndex: selectedIndex,
+                            ),
+                          ),
+                        );
+                      },
                       child: ListTile(
                         leading: Container(
                           height: 46,
