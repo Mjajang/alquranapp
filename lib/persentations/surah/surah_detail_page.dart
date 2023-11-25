@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 
 import 'package:alquranapp/common/constants/text_style.dart';
 import 'package:alquranapp/data/models/list_surah_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants/colors.dart';
+import 'bloc/detail_surah/detail_surah_bloc.dart';
 
 class SurahDetailPage extends StatefulWidget {
   final List<ListSurahModel> listSurah;
   final int initialIndex;
+  final String numberSurah;
 
   const SurahDetailPage({
     Key? key,
     required this.listSurah,
     this.initialIndex = 0,
+    required this.numberSurah,
   }) : super(key: key);
 
   @override
@@ -29,6 +33,10 @@ class _SurahDetailPageState extends State<SurahDetailPage>
   @override
   void initState() {
     super.initState();
+
+    BlocProvider.of<DetailSurahBloc>(context)
+        .add(DetailSurahGetEvent(widget.numberSurah));
+
     tabs = widget.listSurah
         .map((surah) => Tab(
               text: surah.namaLatin,
@@ -126,69 +134,159 @@ class _DetailSurahState extends State<DetailSurah> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
-              gradient: LinearGradient(
-                colors: [
-                  ColorName.bg300Color,
-                  ColorName.bg200Color,
-                ],
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+      body: BlocBuilder<DetailSurahBloc, DetailSurahState>(
+        builder: (context, state) {
+          if (state is DetailSurahError) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+
+          if (state is DetailSurahSuccess) {
+            final data = state.response.data;
+
+            return ListView(
               children: [
-                Text(
-                  'Makah',
-                  style: blackTextStyleSecondary,
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    gradient: const LinearGradient(
+                      colors: [
+                        ColorName.bg300Color,
+                        ColorName.bg200Color,
+                      ],
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        data!.tempatTurun.toString(),
+                        style: blackTextStyleSecondary,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            data.namaLatin.toString(),
+                            style: blackTextStyleSecondary,
+                          ),
+                          Text(
+                            "(${data.arti})",
+                            style: blackTextStyleSecondary,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        "${data.jumlahAyat} ayat",
+                        style: blackTextStyleSecondary,
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  "Surah",
-                  style: blackTextStyleSecondary,
-                ),
-                Text(
-                  "Ayat",
-                  style: blackTextStyleSecondary,
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: data.ayat!.length,
+                  itemBuilder: (context, index) {
+                    final ayat = data.ayat![index];
+
+                    final color =
+                        index.isEven ? ColorName.bgColor : ColorName.bg200Color;
+
+                    return Container(
+                      color: color,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Table(
+                              columnWidths: const {
+                                0: FixedColumnWidth(40),
+                                1: FlexColumnWidth(3),
+                              },
+                              defaultVerticalAlignment:
+                                  TableCellVerticalAlignment.top,
+                              children: [
+                                buildTableRow(
+                                  label: ayat.nomorAyat.toString(),
+                                  data: ayat.teksArab.toString(),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              "${ayat.teksLatin}",
+                              textAlign: TextAlign.justify,
+                              style: blackTextStyleSecondary.copyWith(
+                                fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              "${ayat.teksIndonesia}",
+                              textAlign: TextAlign.justify,
+                              style: blackTextStyle.copyWith(
+                                fontSize: 18,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
-            ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: 7,
-            itemBuilder: (context, index) {
-              return const ListTile(
-                title: Text('Ayat'),
-              );
-            },
-          ),
-        ],
+            );
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
-}
 
-class CenteredTabBar extends StatelessWidget implements PreferredSizeWidget {
-  final TabBar tabBar;
-  @override
-  final Size preferredSize;
-
-  CenteredTabBar({super.key, required this.tabBar})
-      : preferredSize = tabBar.preferredSize;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: tabBar,
+  TableRow buildTableRow({
+    required String label,
+    required String data,
+  }) {
+    return TableRow(
+      children: [
+        Container(
+          height: 40,
+          width: 40,
+          margin: const EdgeInsets.only(top: 5),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(width: 2),
+          ),
+          child: Text(
+            label,
+            style: blackTextStyle,
+          ),
+        ),
+        Text(
+          data,
+          textAlign: TextAlign.end,
+          style: arabicBlackStyle.copyWith(
+            fontSize: 25,
+            height: 2,
+          ),
+        ),
+      ],
     );
   }
 }

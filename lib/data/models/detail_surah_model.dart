@@ -35,7 +35,7 @@ class DetailSurahModel {
   final Map<String, String>? audioFull;
   final List<Ayat>? ayat;
   final SuratSelanjutnya? suratSelanjutnya;
-  final bool? suratSebelumnya;
+  final SuratSebelumnya? suratSebelumnya;
 
   DetailSurahModel({
     this.nomor,
@@ -71,7 +71,7 @@ class DetailSurahModel {
         suratSelanjutnya: json["suratSelanjutnya"] == null
             ? null
             : SuratSelanjutnya.fromMap(json["suratSelanjutnya"]),
-        suratSebelumnya: json["suratSebelumnya"],
+        suratSebelumnya: SuratSebelumnya.fromDynamic(json["suratSebelumnya"]),
       );
 }
 
@@ -125,4 +125,36 @@ class SuratSelanjutnya {
         namaLatin: json["namaLatin"],
         jumlahAyat: json["jumlahAyat"],
       );
+}
+
+class SuratSebelumnya {
+  final int? nomor;
+  final String? nama;
+  final String? namaLatin;
+  final int? jumlahAyat;
+  final bool? isAvailable;
+
+  SuratSebelumnya({
+    this.nomor,
+    this.nama,
+    this.namaLatin,
+    this.jumlahAyat,
+    this.isAvailable,
+  });
+
+  factory SuratSebelumnya.fromDynamic(dynamic json) {
+    if (json is bool) {
+      return SuratSebelumnya(isAvailable: json);
+    } else if (json is Map<String, dynamic>) {
+      return SuratSebelumnya(
+        nomor: json["nomor"],
+        nama: json["nama"],
+        namaLatin: json["namaLatin"],
+        jumlahAyat: json["jumlahAyat"],
+        isAvailable: true,
+      );
+    } else {
+      throw Exception('Unexpected type for suratSebelumnya');
+    }
+  }
 }

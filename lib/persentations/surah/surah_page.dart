@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../common/constants/colors.dart';
 import '../../common/constants/text_style.dart';
 import '../../data/models/list_surah_model.dart';
+import 'bloc/detail_surah/detail_surah_bloc.dart';
 import 'bloc/list_surah/list_surah_bloc.dart';
 
 class SurahPage extends StatelessWidget {
@@ -61,10 +62,18 @@ class SurahPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SurahDetailPage(
-                              listSurah: reversedList,
-                              initialIndex: selectedIndex,
-                            ),
+                            builder: (context) {
+                              return BlocProvider(
+                                create: (context) => DetailSurahBloc(),
+                                child: SurahDetailPage(
+                                  listSurah: reversedList,
+                                  initialIndex: selectedIndex,
+                                  numberSurah: reversedList[selectedIndex]
+                                      .nomor
+                                      .toString(),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
