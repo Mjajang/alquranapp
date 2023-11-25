@@ -1,5 +1,4 @@
 import 'package:alquranapp/persentations/bookmark/bookmark_page.dart';
-import 'package:alquranapp/persentations/juz/juz_page.dart';
 import 'package:alquranapp/persentations/surah/surah_page.dart';
 import 'package:flutter/material.dart';
 
@@ -16,14 +15,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<Widget> _pages = [
     const SurahPage(),
-    const JuzPage(),
     const BookmarkPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -68,7 +66,6 @@ class _HomePageState extends State<HomePage> {
             indicatorSize: TabBarIndicatorSize.tab,
             tabs: [
               Tab(text: "SURAH"),
-              Tab(text: 'JUZ'),
               Tab(text: 'BOOKMARK'),
             ],
           ),
