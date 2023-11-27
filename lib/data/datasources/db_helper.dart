@@ -61,3 +61,13 @@ class DatabaseCreator {
     await db.execute(masterListSurah);
   }
 }
+
+class DatabaseGetLocalData {
+  Future<List<Map<String, dynamic>>> getAllListSurahLocalData(
+      Database db) async {
+    final List<Map<String, dynamic>> localData =
+        await db.query('tb_list_surah');
+
+    return localData;
+  }
+}

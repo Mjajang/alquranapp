@@ -42,7 +42,6 @@ class ListSurahModel {
   final String? tempatTurun;
   final String? arti;
   final String? deskripsi;
-  final Map<String, String>? audioFull;
 
   ListSurahModel({
     this.nomor,
@@ -52,7 +51,6 @@ class ListSurahModel {
     this.tempatTurun,
     this.arti,
     this.deskripsi,
-    this.audioFull,
   });
 
   factory ListSurahModel.fromJson(String str) =>
@@ -68,8 +66,6 @@ class ListSurahModel {
         tempatTurun: json["tempatTurun"],
         arti: json["arti"],
         deskripsi: json["deskripsi"],
-        audioFull: Map.from(json["audioFull"]!)
-            .map((k, v) => MapEntry<String, String>(k, v)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -80,7 +76,5 @@ class ListSurahModel {
         "tempatTurun": tempatTurun,
         "arti": arti,
         "deskripsi": deskripsi,
-        "audioFull":
-            Map.from(audioFull!).map((k, v) => MapEntry<String, dynamic>(k, v)),
       };
 }
