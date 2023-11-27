@@ -1,3 +1,5 @@
+import 'package:alquranapp/data/datasources/surah_local_datasource.dart';
+
 import '../../common/constants/variables.dart';
 import '../models/list_surah_model.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +15,13 @@ class SurahRemoteDatasource {
         throw 'Failed get list surah';
       }
 
-      return ListSurahModelResponse.fromJson(response.body);
+      final listSurahResponse = ListSurahModelResponse.fromJson(response.body);
+
+      for (var surah in listSurahResponse.data!) {
+        await SurahLocalDatasource().saveListSurah(surah);
+      }
+
+      return listSurahResponse;
     } catch (e) {
       throw e.toString();
     }

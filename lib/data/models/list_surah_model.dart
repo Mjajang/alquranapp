@@ -14,6 +14,8 @@ class ListSurahModelResponse {
   factory ListSurahModelResponse.fromJson(String str) =>
       ListSurahModelResponse.fromMap(json.decode(str));
 
+  String toJson() => json.encode(toMap());
+
   factory ListSurahModelResponse.fromMap(Map<String, dynamic> json) =>
       ListSurahModelResponse(
         code: json["code"],
@@ -23,6 +25,13 @@ class ListSurahModelResponse {
             : List<ListSurahModel>.from(
                 json["data"]!.map((x) => ListSurahModel.fromMap(x))),
       );
+
+  Map<String, dynamic> toMap() => {
+        "code": code,
+        "message": message,
+        "data":
+            data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
+      };
 }
 
 class ListSurahModel {
@@ -49,6 +58,8 @@ class ListSurahModel {
   factory ListSurahModel.fromJson(String str) =>
       ListSurahModel.fromMap(json.decode(str));
 
+  String toJson() => json.encode(toMap());
+
   factory ListSurahModel.fromMap(Map<String, dynamic> json) => ListSurahModel(
         nomor: json["nomor"],
         nama: json["nama"],
@@ -60,4 +71,16 @@ class ListSurahModel {
         audioFull: Map.from(json["audioFull"]!)
             .map((k, v) => MapEntry<String, String>(k, v)),
       );
+
+  Map<String, dynamic> toMap() => {
+        "nomor": nomor,
+        "nama": nama,
+        "namaLatin": namaLatin,
+        "jumlahAyat": jumlahAyat,
+        "tempatTurun": tempatTurun,
+        "arti": arti,
+        "deskripsi": deskripsi,
+        "audioFull":
+            Map.from(audioFull!).map((k, v) => MapEntry<String, dynamic>(k, v)),
+      };
 }
